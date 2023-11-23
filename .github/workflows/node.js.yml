@@ -29,13 +29,10 @@ jobs:
     - run: npm ci
     - run: npm run build
 
-    - name: Simple GitHub Pages Deploy Action
-    # You may pin to the exact commit or the version.
-    # uses: rdarida/simple-github-pages-deploy-action@290913edc3f3978a087e0687a67a1cda044965c5
-      uses: rdarida/simple-github-pages-deploy-action@v1
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4.3.3
       with:
-        # Set git config user.name
-        git-user: ntrwansuiBC
-        # Set git config user.email
-        git-email: ntrwansui@qq.com
+        branch: gh-pages 
+        folder: dist
+
               
