@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { HotKey } from '../data/scorer/configs/setting'
 const props = defineProps({
   visible: Boolean,

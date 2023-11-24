@@ -1,5 +1,6 @@
 import { DataSourceType } from '../types/enum'
 import { BasicSourceImage, LocalSourceImage, RemoteSourceImage } from './image'
+import { downloadFile } from '@huggingface/hub'
 
 export abstract class BasicDataSource {
   abstract getType(): DataSourceType
@@ -20,7 +21,7 @@ export class LocalZipDataSource extends BasicDataSource {
     })
   }
   getType(): DataSourceType {
-      return DataSourceType.LocalZip
+    return DataSourceType.LocalZip
   }
   getImageNames(): string[] {
     return this.images.map((image) => image.name)
@@ -51,7 +52,7 @@ export class RemoteUrlsDataSource extends BasicDataSource {
     })
   }
   getType(): DataSourceType {
-      return DataSourceType.RemoteUrls
+    return DataSourceType.RemoteUrls
   }
   getImageNames(): string[] {
     return this.images.map((image) => image.url)
@@ -70,5 +71,11 @@ export class RemoteUrlsDataSource extends BasicDataSource {
   }
   size(): number {
     return this.images.length
+  }
+}
+
+export class RemoteHFRepoZipDataSource extends BasicDataSource {
+  repoUrl = ''
+  async download(name: string) {
   }
 }
