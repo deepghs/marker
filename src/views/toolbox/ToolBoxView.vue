@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseToolItem from './components/BaseToolItem.vue'
+import ImageUtilsTesting from '../tool/ImageUtilsTesting.vue'
 import { ref } from 'vue'
 
 const page_name = ref('ToolBox')
@@ -7,6 +7,9 @@ const page_name = ref('ToolBox')
 <template>
   <el-card class="about">
     <div class="toolbox-container">
+      <div class="toolbox-item">
+        <ImageUtilsTesting />
+      </div>
     </div>
   </el-card>
 </template>

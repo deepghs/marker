@@ -1,4 +1,4 @@
-import { RemoteSourceImage, BasicSourceImage, LocalSourceImage } from './datasource/image'
+import { RemoteSourceImage, BasicSourceImage, LocalMemoryImage } from './datasource/image'
 import { ScorerType } from './types/enum'
 
 export class SingleData {
@@ -27,12 +27,12 @@ export class SingleData {
     name2: string,
     arraybuffer2: ArrayBuffer
   ) {
-    const image1 = new LocalSourceImage(name1, arraybuffer1)
-    const image2 = new LocalSourceImage(name2, arraybuffer2)
+    const image1 = new LocalMemoryImage(name1, arraybuffer1)
+    const image2 = new LocalMemoryImage(name2, arraybuffer2)
     return await SingleData.fromLocalImages(image1, image2)
   }
 
-  static async fromLocalImages(image1: LocalSourceImage, image2: LocalSourceImage) {
+  static async fromLocalImages(image1: LocalMemoryImage, image2: LocalMemoryImage) {
     await image1.loadImage()
     await image2.loadImage()
     return new SingleData(image1, image2)
