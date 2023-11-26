@@ -1,6 +1,7 @@
 export enum DataSourceType {
-  LocalZip,
-  RemoteUrls
+  LocalZip = 'Local',
+  RemoteUrls = 'RemoteUrls',
+  RemoteHFRepoZip = 'HFZip',
 }
 
 export enum ImageType {

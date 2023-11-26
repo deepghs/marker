@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import MarkerView from '../views/MarkerView.vue'
+import MarkerView from '../views/marker/MarkerView.vue'
 import HomeView from '../views/HomeView.vue'
+import ToolBoxView from '../views/toolbox/ToolBoxView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,11 @@ const router = createRouter({
       name: 'marker',
       component: MarkerView
     },
+    // {
+    //   path: '/toolbox',
+    //   name: 'toolbox',
+    //   component: ToolBoxView
+    // },
     {
       path: '/about',
       name: 'about',

@@ -7,7 +7,7 @@ export abstract class BasicSourceImage {
   abstract export(): any
 }
 
-export class LocalSourceImage extends BasicSourceImage {
+export class LocalMemoryImage extends BasicSourceImage {
   name: string
   content: ArrayBuffer
   base64: string | ArrayBuffer | null = null
@@ -41,8 +41,8 @@ export class LocalSourceImage extends BasicSourceImage {
     })
   }
 
-  clone(): LocalSourceImage {
-    return new LocalSourceImage(this.name, this.content)
+  clone(): LocalMemoryImage {
+    return new LocalMemoryImage(this.name, this.content)
   }
 
   export(): any {
