@@ -1,8 +1,9 @@
 import { downloadFile, listFiles } from '@huggingface/hub'
-import type { RepoDesignation } from '@huggingface/hub'
+import type { RepoId } from '@huggingface/hub'
 import JSZip from 'jszip'
 
 // const HF_ACCESS_TOKEN = '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';
+export type RepoDesignation = RepoId
 
 export enum HuggingFaceFileType {
     FILE = 'file',
@@ -36,8 +37,8 @@ export class Reporitory {
 }
 
 export async function getFilesNameList(repo: RepoDesignation, fileType: HuggingFaceFileType, suffix = '') {
-    let files = listFiles({ repo })
-    let datasets = [] as string[]
+    const files = listFiles({ repo })
+    const datasets = [] as string[]
     for await (const file of files) {
         if (file.type === fileType && file.path.endsWith(suffix)) {
             datasets.push(file.path)
@@ -47,10 +48,10 @@ export async function getFilesNameList(repo: RepoDesignation, fileType: HuggingF
 }
 
 export async function downloadAndUnzip(repo: RepoDesignation, path: string) {
-    let zipFile = await downloadFile({ repo, path })
+    const zipFile = await downloadFile({ repo, path })
     if (zipFile && zipFile?.ok) {
-        let arraybuffer = await zipFile.arrayBuffer()
-        let unzip = JSZip.loadAsync(arraybuffer)
+        const arraybuffer = await zipFile.arrayBuffer()
+        const unzip = JSZip.loadAsync(arraybuffer)
         return unzip
     }
 }

@@ -23,7 +23,7 @@ const title = import.meta.env.VITE_APP_TITLE
     <div class="flex-grow" />
     <el-menu-item index="home">Home</el-menu-item>
     <el-menu-item index="marker">Marker</el-menu-item>
-    <el-menu-item index="toolbox">ToolBox</el-menu-item>
+    <!-- <el-menu-item index="toolbox">ToolBox</el-menu-item> -->
     <el-menu-item index="about">About</el-menu-item>
   </el-menu>
 </template>

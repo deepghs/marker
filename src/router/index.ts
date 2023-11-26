@@ -20,11 +20,11 @@ const router = createRouter({
       name: 'marker',
       component: MarkerView
     },
-    {
-      path: '/toolbox',
-      name: 'toolbox',
-      component: ToolBoxView
-    },
+    // {
+    //   path: '/toolbox',
+    //   name: 'toolbox',
+    //   component: ToolBoxView
+    // },
     {
       path: '/about',
       name: 'about',

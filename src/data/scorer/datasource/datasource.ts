@@ -2,7 +2,7 @@ import type JSZip from 'jszip'
 import { DataSourceType } from '../types/enum'
 import { BasicSourceImage, LocalMemoryImage, RemoteSourceImage } from './image'
 import { downloadAndUnzip } from '@/utils/huggingface'
-import type { RepoDesignation } from '@huggingface/hub'
+import type { RepoDesignation } from '@/utils/huggingface'
 
 export abstract class BasicDataSource {
   abstract getType(): DataSourceType
@@ -25,8 +25,8 @@ export class LocalZipDataSource extends BasicDataSource {
   }
 
   static async FromZip(zip: JSZip) {
-    let images = await new Promise<LocalMemoryImage[]>((resolve, reject) => {
-      let unzipPromises: any[] = []
+    const images = await new Promise<LocalMemoryImage[]>((resolve, reject) => {
+      const unzipPromises: any[] = []
       zip?.forEach((relativePath, file) => {
         if (!file.dir) {
           unzipPromises.push(
@@ -120,7 +120,7 @@ export class RemoteHFRepoZipDataSource extends BasicDataSource {
     this.dataset = datasetName
   }
   async initData() {
-    let list = await downloadAndUnzip(this.repo, this.dataset)
+    const list = await downloadAndUnzip(this.repo, this.dataset)
     if (list) {
       this.local = await LocalZipDataSource.FromZip(list);
     }

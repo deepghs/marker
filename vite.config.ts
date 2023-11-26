@@ -4,6 +4,9 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
+// import wasm from "vite-plugin-wasm";
+// import topLevelAwait from "vite-plugin-top-level-await";
 
 const getViteEnv = (mode: string, target: string) => {
   return loadEnv(mode, process.cwd())[target]
@@ -15,6 +18,8 @@ export default ({ mode }) =>
     plugins: [
       vue(),
       vueJsx(),
+      // wasm(),
+      // topLevelAwait(),
       createHtmlPlugin({
         minify: true,
         inject: {
@@ -23,12 +28,16 @@ export default ({ mode }) =>
             title: getViteEnv(mode, 'VITE_APP_TITLE')
           }
         }
-      })
+      }),
+      nodePolyfills()
     ],
     base:'./',
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
+    },
+    build: {
+      minify: false,
     }
   })

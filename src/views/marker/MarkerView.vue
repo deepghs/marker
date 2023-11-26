@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Setting } from '@element-plus/icons-vue'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import localforage from 'localforage'
 import JSZip from 'jszip'
 import { ElLoading, type UploadInstance } from 'element-plus'
@@ -19,12 +19,12 @@ import {
   RemoteUrlsDataSource,
   RemoteHFRepoZipDataSource
 } from '@/data/scorer/datasource/datasource'
-import { DataSourceType } from '@/data/scorer/types/enum'
+import { DataSourceType, ScorerType } from '@/data/scorer/types/enum'
 import { checkVersion, upgrade } from '@/data/scorer/configs/info'
-import type { RepoDesignation } from '@huggingface/hub'
+import type { RepoDesignation } from '@/utils/huggingface'
 import { Reporitory } from '@/utils/huggingface'
 
-let dataSource = ref({} as BasicDataSource)
+let dataSource = ref(new RemoteUrlsDataSource([]) as BasicDataSource)
 let dataSourceType = ref(DataSourceType.RemoteHFRepoZip)
 let current = ref(SingleData.fromRemoteUrls('', ''))
 let currentIndex = ref(0)
@@ -318,6 +318,28 @@ function exportToExcel() {
   document.body.removeChild(link) //下载完成移除元素
   window.URL.revokeObjectURL(url) //释放掉blob对象
 }
+
+function getStatistic(){
+  const loadedDateset = dataSource.value.size() ?? 0;
+  const total = history.value.length
+  const statisic = history.value.reduce((result, item) => {
+    if (item.getResult() !==  ScorerType.SKIP) {
+      result.checked += 1
+    }else{
+      result.skip += 1
+    }
+    return result
+  }, {
+    checked : 0,
+    skip : 0
+  })
+  return {
+    dataset: loadedDateset,
+    total: total,
+    checked: statisic.checked,
+    skip: statisic.skip
+  }
+}
 </script>
 
 <template>
@@ -326,6 +348,10 @@ function exportToExcel() {
       <el-header class="scorer-menu">
         <el-button :icon="Setting" circle @click="showSettingDialog" />
         <el-button class="export-button" type="primary" @click="exportToExcel">Export</el-button>
+        <span>{{ 'total: ' + getStatistic().total }}</span>
+        <span style="padding-right: 5px;">{{ 'checked: ' + getStatistic().checked }}</span>
+        <span style="padding-right: 5px;">{{ 'skip: ' + getStatistic().skip }}</span>
+        <span style="padding-right: 5px;">{{ 'dataset: ' + getStatistic().dataset }}</span>
       </el-header>
       <el-main class="scorer-container">
         <el-card :shadow="isSelected(0)" class="image-container" @click="selectImage(0)">
@@ -356,14 +382,14 @@ function exportToExcel() {
                 <div style="padding-top: 10px;">
                   <div v-if="dataSourceType === DataSourceType.RemoteHFRepoZip">
                     <div class="hfsource-setting">
-                      <el-input v-model="currentRepo.repo.name" placeholder="dataset name" />
-                      <el-button @click="async () => { await currentRepo.getFiles(true) }">Get Repo</el-button>
+                      <el-input style="width:300px" v-model="currentRepo.repo.name" placeholder="dataset name" disabled/>
+                      <el-button type="primary" style="width:100px" @click="async () => { await currentRepo.getFiles(true) }" :disabled="currentRepo.loaded">Get Repo</el-button>
                     </div>
                     <div class="hfsource-setting">
-                      <el-select v-model="selectedHFDataset" placeholder="dataset name" :disabled="!currentRepo.loaded">
-                        <el-option v-for="(item) in currentRepo.files" :label="item" :value="item" />
+                      <el-select style="width:300px" v-model="selectedHFDataset" placeholder="dataset name" :disabled="!currentRepo.loaded">
+                        <el-option v-for="(item) in currentRepo.files" :key="item" :label="item" :value="item" />
                       </el-select>
-                      <el-button :disabled="!currentRepo.loaded"
+                      <el-button type="primary" style="width:100px" :disabled="!currentRepo.loaded"
                         @click="async () => { dataSource = getRemoteHFDataSource(currentRepo.repo, selectedHFDataset); await init(); closeSettingDialog() }">Load</el-button>
                     </div>
                   </div>
@@ -477,8 +503,9 @@ function exportToExcel() {
   flex-direction: row;
   flex-wrap: nowrap;
   align-content: center;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
+  padding-bottom: 10px;
 }
 
 .scorer .scorer-footer {
